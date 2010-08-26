@@ -1,0 +1,6 @@
+/debug
+/release
+/build
+/doc-html
+*~
+*.kdev4
