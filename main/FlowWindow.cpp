@@ -19,9 +19,9 @@
 
 const double CalibrationTime = 1.0;
 
-FlowWindow::FlowWindow():realTimeData("Voltage", 300), 
-  medTimeData("Voltage", 1, 300),
-  longTimeData("Voltage", 10, 100),
+FlowWindow::FlowWindow():realTimeData("Flow [ml/min]", 600), 
+  medTimeData("Flow [ml/min]", 2, 300),
+  longTimeData("Flow [ml/min]", 10, 1000),
   ctTimeOffset(0),
   calibrationFactor(0),
   calibrationOffSet(0),
@@ -61,7 +61,7 @@ FlowWindow::FlowWindow():realTimeData("Voltage", 300),
   
   {
     vtkQtChartTitle *title = new vtkQtChartTitle();
-    title->setText(tr("1 s Average"));
+    title->setText(tr("2 s Average"));
     vtkQtChartTitle *titleX = new vtkQtChartTitle();
     titleX->setText(tr("time [s]"));
     vtkQtChartTitle *titleY = new vtkQtChartTitle();
@@ -143,13 +143,10 @@ void FlowWindow::readData() {
 	double flowValue = rawValue * calibrationFactor;
 	double timeInSec = startTime.elapsed() / 1000.0;
 	
-	
 	realTimeData.insertData(timeInSec, flowValue);
-	realTimeChart->reset();
 	
 	MinAvgMaxTimeDataModel::DataType insertValue;
 	if ( medTimeData.insertData(timeInSec, flowValue, insertValue) ) {
-	  medTimeChart->reset();
 	  if (!ctTime.isNull() && logStream.is_open()) {
 	    QTime dataTime = startTime.addMSecs(insertValue.time*1000);
 	    QTime dataCTTime = dataTime.addMSecs( ctTimeOffset );
@@ -160,9 +157,8 @@ void FlowWindow::readData() {
 	  }
 	}
 	
-	if ( longTimeData.insertData(timeInSec, flowValue, insertValue) ) {
-	  longTimeChart->reset();
-	}
+	longTimeData.insertData(timeInSec, flowValue, insertValue);
+	
 	if (CalibrateMode!=CalibrateOff) {
 	  if (CalibrateMode == CalibrateZero) {
 	    if (calibrationStart.isNull()) {

@@ -36,6 +36,12 @@ void TimeDataModel::updateRange() {
 }
 
 void TimeDataModel::insertData(double time, double val) {
-  data.push_back( DataType(time, val) );
-  validMinMax = false;
+  data_buffer.push_back(DataType(time, val));
+  if (lastUpdate.elapsed() > updateIntervalMillis) {
+    this->modelAboutToBeReset();
+    data = data_buffer;
+    validMinMax = false;
+    this->modelReset();
+    lastUpdate.restart();
+  }
 }
