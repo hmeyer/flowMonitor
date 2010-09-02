@@ -67,10 +67,10 @@ bool MinAvgMaxTimeDataModel::insertData(double time, double val, DataType &inser
     insertValue = DataType( sampleStartTime + sampleTime/2, min(acc), mean(acc), max(acc) );
     this->modelAboutToBeReset();
     data.push_back( insertValue );
+    validMinMax = false;
     this->modelReset();
     acc = AccumulatorType();
     sampleStartTime = time;
-    validMinMax = false;
   }
   acc( val );
   return !validMinMax;

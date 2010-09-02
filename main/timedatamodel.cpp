@@ -2,6 +2,7 @@
 
 #include <boost/foreach.hpp>
 #include <limits>
+#include <iostream>
 
 QVariant TimeDataModel::getSeriesValue( int series, int index, int component) const {
   if (series==0 && (component == 0 || component == 1) && index >= 0 && index < data.size()) {

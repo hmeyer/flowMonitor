@@ -9,7 +9,7 @@
 class TimeDataModel: public vtkQtChartSeriesModel {
   public:
     TimeDataModel(const QString &name_, size_t size, int updateIntervalMillis_ = 500, QObject *parent = 0)
-      :vtkQtChartSeriesModel(parent), updateIntervalMillis(updateIntervalMillis_), data(size), name(name_), validMinMax(false) {lastUpdate.restart();}
+      :vtkQtChartSeriesModel(parent), updateIntervalMillis(updateIntervalMillis_), data(size), data_buffer(size), name(name_), validMinMax(false) {lastUpdate.restart();}
     virtual int getNumberOfSeries()  const { return 1; }
     virtual int getNumberOfSeriesValues( int series ) const { return data.size(); }
     virtual QVariant getSeriesName( int series )  const { return name; }
